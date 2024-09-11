@@ -1,23 +1,24 @@
 import { useState, useEffect } from 'react';
-import { searchGithubUser } from '../api/API';
+import { searchGithub } from '../api/API';
 import CandidateCard from '../components/CandidateCard';
-import { Candidate } from '../interface/Candidate';
+import { Candidate } from '../utils/interface/Candidate';
 
 const CandidateSearch = () => {
-  const [searchTerm, setSearchTerm] = useState<string>(''); 
-  const [candidates, setCandidates] = useState<Candidate[]>([]); 
+  const [candidate, setCandidate] = useState<Candidate | null>(null); 
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    
-    const fetchCandidates = async () => {
-      const response = await searchGithubUser(searchTerm);
-      setCandidates(response.items);
+    const fetchCandidate = async () => {
+      try {
+        const response = await searchGithub();
+        setCandidate(response[0]);
+      } catch (err) {
+        setError('Failed to fetch candidates');
+      }
     };
 
-    if (searchTerm) {
-      fetchCandidates();
-    }
-  }, [searchTerm]);
+      fetchCandidate();
+  }, []);
 
   const addToSavedCandidates = () => {
     let parsedCandidates: Candidate[] = [];
@@ -25,26 +26,34 @@ const CandidateSearch = () => {
     if (typeof savedCandidates === 'string') {
       parsedCandidates = JSON.parse(savedCandidates);
     }
-    parsedCandidates.push(candidates[0]);
+    if (candidate) {
+    parsedCandidates.push(candidate);
     localStorage.setItem('savedCandidates', JSON.stringify(parsedCandidates));
-    setCandidates(candidates.slice(1)); 
+    setCandidate(null); 
+  }
+  };
+
+  const fetchNextCandidate = async () => {
+    try {
+      const response = await searchGithub();
+      setCandidate(response[0]);
+    } catch (err) {
+      setError('Failed to fetch candidates');
+    }
   };
 
   return (
     <div>
       <h1>Candidate Search</h1>
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        placeholder="Search for a candidate"
-      />
-      {candidates.length > 0 && (
+      {error && <p>{error}</p>}
+      {candidate ? (
         <div>
-          <CandidateCard candidate={candidates[0]} />
+          <CandidateCard candidate={candidate} />
           <button onClick={addToSavedCandidates}>+</button>
-          <button onClick={() => setCandidates(candidates.slice(1))}>-</button>
+          <button onClick={fetchNextCandidate}>-</button>
         </div>
+      ) : (
+        <p>Loading candidate...</p>
       )}
     </div>
   );

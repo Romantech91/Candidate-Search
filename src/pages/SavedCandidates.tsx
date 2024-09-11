@@ -1,6 +1,5 @@
-import type React from 'react';
-import { useEffect, useState } from 'react';
-import { Candidate } from '../interface/Candidate';
+import { useEffect, useState} from 'react';
+import { Candidate } from '../utils/interface/Candidate';
 import CandidateCard from '../components/CandidateCard'; 
 
 
