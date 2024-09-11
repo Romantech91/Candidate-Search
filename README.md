@@ -85,6 +85,8 @@ This is a React application that allows users to search for GitHub users and vie
 
 Once the development server is running, you can open your browser and navigate to `http://localhost:3000` to use the application. The application will fetch and display GitHub users one at a time, showing their name, username, location, avatar, email, HTML URL, and company.
 
+![App Screenshot](./src/assets/appScreenshot.jpg)
+
 ## Features
 
 - Fetch and display GitHub users one at a time.
