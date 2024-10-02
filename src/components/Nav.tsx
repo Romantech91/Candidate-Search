@@ -9,7 +9,7 @@ const Nav = () => {
         <h1>Navigation</h1>
         <ul>
           <li>
-            <Link to="/candidate-search" className="active">
+            <Link to="/" className="active">
               Candidate Search {currentPage === '/candidate-search' && '(Current)'}
             </Link>
           </li>
@@ -18,11 +18,7 @@ const Nav = () => {
               Saved Candidates {currentPage === '/saved-candidates' && '(Current)'}
             </Link>
           </li>
-          <li>
-            <Link to="/error-page" className="active">
-              Error Page {currentPage === '/error-page' && '(Current)'}
-            </Link>
-          </li>
+         
         </ul>
       </nav>
     </div>
